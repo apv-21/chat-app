@@ -13,15 +13,16 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const ChatComponent = () => {
+const ChatComponent = ({savedChatMessages = [], saveMessageCallback}) => {
   const [userInput, setUserInput] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(savedChatMessages ?? []);
 
   const handleSendMessage = () => {
     if (userInput.trim()) {
       const currentTimestamp = new Date().toLocaleTimeString();
       setMessages([...messages, { content: userInput.trim(), time: currentTimestamp }]);
       setUserInput('');
+      saveMessageCallback(userInput.trim(), currentTimestamp)
     }
   };
 
@@ -53,7 +54,7 @@ const ChatComponent = () => {
         </IconButton>
 
         <List>
-          {messages.map((message, index) => (
+          {messages?.map((message, index) => (
             <ListItem
               key={index}
               sx={{
